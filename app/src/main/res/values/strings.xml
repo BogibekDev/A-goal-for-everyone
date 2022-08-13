@@ -17,4 +17,6 @@
     <string name="vibration_on_off">Vibration On/Off</string>
     <string name="language">Language</string>
     <string name="back_to_menu">Back to menu</string>
+    <string name="you_win">You win</string>
+    <string name="replay">Replay</string>
 </resources>
