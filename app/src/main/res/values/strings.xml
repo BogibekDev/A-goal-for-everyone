@@ -12,4 +12,9 @@
     <string name="_12">12</string>
     <string name="score">Score</string>
     <string name="_1_0">1/0</string>
+    <string name="setting">Setting</string>
+    <string name="sound_on_off">Sound On/Off</string>
+    <string name="vibration_on_off">Vibration On/Off</string>
+    <string name="language">Language</string>
+    <string name="back_to_menu">Back to menu</string>
 </resources>
