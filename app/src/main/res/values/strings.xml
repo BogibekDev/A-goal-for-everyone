@@ -5,4 +5,11 @@
     <string name="str_start">Start</string>
     <string name="menu">Menu</string>
     <string name="start">Start</string>
+    <string name="time">Time</string>
+    <string name="_1_30">1:30</string>
+    <string name="attempt">Attempt</string>
+    <string name="round">Round</string>
+    <string name="_12">12</string>
+    <string name="score">Score</string>
+    <string name="_1_0">1/0</string>
 </resources>
