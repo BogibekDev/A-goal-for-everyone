@@ -5,6 +5,182 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.GameFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="7.2">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@drawable/background"
+                android:weightSum="5">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/v_menu">
+
+<!--                    Code Here-->
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:layout_weight="4">
+
+                    <ImageView
+                        android:id="@+id/ivMainPhoto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:padding="50dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/img2"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".1"
+            android:background="#0D0D0D"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="4"
+            tools:ignore="NestedWeights">
+
+            <ImageView
+                android:id="@+id/ivDownWhite"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:layout_margin="5dp"
+                android:src="@drawable/down"
+                android:padding="30dp"/>
+
+            <ImageView
+                android:id="@+id/ivLeftWhite"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:layout_margin="5dp"
+                android:src="@drawable/left"
+                android:padding="30dp"/>
+
+            <ImageView
+                android:id="@+id/ivRightWhite"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:layout_margin="5dp"
+                android:src="@drawable/right"
+                android:padding="30dp"/>
+
+            <ImageView
+                android:id="@+id/ivUpWhite"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:layout_margin="5dp"
+                android:src="@drawable/up"
+                android:padding="30dp"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".1"
+            android:background="#0D0D0D"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:background="#882222"
+            android:gravity="center"
+            android:weightSum="4"
+            tools:ignore="NestedWeights">
+
+            <ImageView
+                android:id="@+id/ivDownBlack"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_square_red"
+                android:src="@drawable/down"
+                android:padding="30dp"/>
+
+            <ImageView
+                android:id="@+id/ivRightBlack"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_square_red"
+                android:src="@drawable/left"
+                android:padding="30dp"/>
+
+            <ImageView
+                android:id="@+id/ivLeftBlack"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_square_red"
+                android:src="@drawable/right"
+                android:padding="30dp"/>
+
+            <ImageView
+                android:id="@+id/ivUpBlack"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_square_red"
+                android:src="@drawable/up"
+                android:padding="30dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </FrameLayout>

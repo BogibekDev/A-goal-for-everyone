@@ -3,24 +3,99 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".ui.fragment.MenuFragment">
 
-
-    <Button
-        android:id="@+id/bGame"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/str_start" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="2.1">
 
-    <Button
-        android:id="@+id/bSetting"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/str_setting" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/btn_black"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/img5"
+                    android:layout_marginStart="50dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:background="@drawable/v_menu">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="28sp"
+                        android:text="@string/menu"
+                        android:textColor="@color/white"
+                        android:textAllCaps="false"
+                        android:textStyle="normal"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom|center">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        android:background="@drawable/btn_red"
+                        app:backgroundTint="@null"
+                        android:textStyle="normal"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:text="@string/start"
+                        android:textSize="28sp"
+                        android:layout_marginStart="50dp"
+                        android:layout_marginEnd="50dp"/>
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
 
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>
