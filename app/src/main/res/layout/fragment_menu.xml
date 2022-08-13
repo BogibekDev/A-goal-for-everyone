@@ -8,16 +8,19 @@
     android:padding="16dp"
     tools:context=".ui.fragment.MenuFragment">
 
+
+    <Button
+        android:id="@+id/bGame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/str_start" />
+
     <Button
         android:id="@+id/bSetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/str_setting" />
 
-    <Button
-        android:id="@+id/bGame"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/str_game" />
+
 
 </LinearLayout>
