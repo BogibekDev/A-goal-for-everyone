@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.agoal4every1.agoalforeveryone.R
 import com.agoal4every1.agoalforeveryone.databinding.FragmentMenuBinding
+import com.agoal4every1.agoalforeveryone.utils.Extentions.click
 import com.agoal4every1.agoalforeveryone.utils.viewBinding
 
 
@@ -20,11 +21,11 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
     private fun setupUi() {
         binding.apply {
 
-            bSetting.setOnClickListener {
+            bSetting.click {
                 findNavController().navigate(R.id.action_menuFragment_to_settingFragment)
             }
 
-            bGame.setOnClickListener {
+            bStart.click {
                 findNavController().navigate(R.id.action_menuFragment_to_gameFragment)
             }
         }

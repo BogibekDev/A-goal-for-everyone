@@ -6,6 +6,12 @@ plugins {
 android {
     compileSdk 32
 
+    bundle {
+        language {
+            // We want to be able to switch the locale at runtime using AppLocale!
+            enableSplit = false
+        }
+    }
     defaultConfig {
         applicationId "com.agoal4every1.agoalforeveryone"
         minSdk 23
@@ -47,5 +53,14 @@ dependencies {
     //navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
+
+    // Manages the Locale used by the app
+    implementation 'dev.b3nedikt.applocale:applocale:3.0.0'
+
+// Needed to intercept view inflation
+    implementation 'dev.b3nedikt.viewpump:viewpump:4.0.10'
+
+// Allows to update the text of views at runtime without recreating the activity
+    implementation 'dev.b3nedikt.reword:reword:4.0.2'
 
 }

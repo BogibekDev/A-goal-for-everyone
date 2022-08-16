@@ -58,7 +58,7 @@
                     android:gravity="bottom|center">
 
                     <Button
-                        android:id="@+id/btnStart"
+                        android:id="@+id/bStart"
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
                         android:background="@drawable/btn_red"
@@ -109,7 +109,7 @@
                     android:gravity="top|center">
 
                     <Button
-                        android:id="@+id/btnSetting"
+                        android:id="@+id/bSetting"
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
                         android:background="@drawable/btn_black"
