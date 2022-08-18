@@ -21,6 +21,7 @@ import com.agoal4every1.agoalforeveryone.R
 import com.agoal4every1.agoalforeveryone.databinding.FragmentGameBinding
 import com.agoal4every1.agoalforeveryone.manager.PrefManager
 import com.agoal4every1.agoalforeveryone.utils.Extentions.click
+import com.agoal4every1.agoalforeveryone.utils.PlaySound
 import com.agoal4every1.agoalforeveryone.utils.viewBinding
 import kotlin.random.Random
 
@@ -71,6 +72,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         heart = 9
         time = 90
         binding.tvRound.text = "$round"
+        binding.ivMainPhoto.setImageResource(randomMainImage())
         setIds()
         setImageLayoutParams()
         setAttempts()
@@ -79,7 +81,6 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         binding.apply {
             ivUpBlack.click {
                 checkImage(R.drawable.up)
-
             }
             ivDownBlack.click {
                 checkImage(R.drawable.down)
@@ -105,10 +106,12 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         if (list[0] == image) {
             //viewni invisible qilish kerak
             Log.d("@@@", "checkImage: true")
+            PlaySound.playTrueSound(requireContext())
         } else {
             heart--
             setAttempts()
             Log.d("@@@", "checkImage: false")
+            PlaySound.playWrongSound(requireContext())
         }
     }
 
@@ -496,6 +499,16 @@ class GameFragment : Fragment(R.layout.fragment_game) {
             1 -> R.drawable.right
             2 -> R.drawable.down
             else -> R.drawable.left
+        }
+    }
+
+
+    private fun randomMainImage(): Int {
+        return when (Random.nextInt(0, 4)) {
+            0 -> R.drawable.img1
+            1 -> R.drawable.img2
+            2 -> R.drawable.img3
+            else -> R.drawable.img4
         }
     }
 
