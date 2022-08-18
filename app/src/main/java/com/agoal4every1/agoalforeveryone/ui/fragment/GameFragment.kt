@@ -2,16 +2,25 @@ package com.agoal4every1.agoalforeveryone.ui.fragment
 
 import android.animation.Animator
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.DisplayMetrics
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import com.agoal4every1.agoalforeveryone.R
 import com.agoal4every1.agoalforeveryone.databinding.FragmentGameBinding
+import com.agoal4every1.agoalforeveryone.manager.PrefManager
+import com.agoal4every1.agoalforeveryone.utils.Extentions.click
 import com.agoal4every1.agoalforeveryone.utils.viewBinding
 import kotlin.random.Random
 
@@ -19,11 +28,27 @@ import kotlin.random.Random
 class GameFragment : Fragment(R.layout.fragment_game) {
     private val binding by viewBinding { FragmentGameBinding.bind(it) }
     private lateinit var lastView: View
+    private lateinit var clickedLastView: View
+    private var timeObject: CountDownTimer? = null
+    private var firstLlAnimationFromX: ValueAnimator? = null
+    private var firstLlAnimationFromXEnd: ValueAnimator? = null
+    private var secondLlAnimationFromX: ValueAnimator? = null
+    private var secondLlAnimationFromXEnd: ValueAnimator? = null
+    private var thirdLlAnimationFromX: ValueAnimator? = null
+    private var thirdLlAnimationFromXEnd: ValueAnimator? = null
+    private var fourthLlAnimationFromX: ValueAnimator? = null
+    private var fourthLlAnimationFromXEnd: ValueAnimator? = null
     private var width = 0
     private var height = 0
     private var heart = 3
     private var time = 90
     private var round = 1
+    private var isDestroyed = false
+    private var isWin: Boolean = false
+    private var isClicked: Boolean = false
+    private var isChanged: Boolean = false
+    private var list = arrayListOf(randomImage(), randomImage(), randomImage(), randomImage())
+    private var ids = arrayOf(0, 1, 2, 3)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,75 +64,146 @@ class GameFragment : Fragment(R.layout.fragment_game) {
     }
 
     private fun setupUi() {
-        lastView = binding.one
-        binding.tvRound.text="$round"
+        round = PrefManager(requireContext()).getInt("round")
+        lastView = binding.four
+        clickedLastView = binding.one
+        isWin = false
+        heart = 3
+        time = 90
+        binding.tvRound.text = "$round"
+        setIds()
         setImageLayoutParams()
         setAttempts()
         setTimer()
         animOneBegin()
+        binding.apply {
+            ivUpBlack.click {
+                checkImage(R.drawable.up)
+            }
+            ivDownBlack.click {
+                checkImage(R.drawable.down)
+            }
+            ivLeftBlack.click {
+                checkImage(R.drawable.left)
+            }
+            ivRightBlack.click {
+                checkImage(R.drawable.right)
+            }
+        }
+    }
+
+    private fun setIds() {
+        ids[0] = binding.one.id
+        ids[1] = binding.two.id
+        ids[2] = binding.three.id
+        ids[3] = binding.four.id
+    }
+
+    private fun checkImage(image: Int) {
+        isClicked = true
+        if (list[0] == image) {
+            //viewni invisible qilish kerak
+            Log.d("@@@", "checkImage: true")
+        } else {
+            heart--
+            setAttempts()
+            Log.d("@@@", "checkImage: false")
+        }
     }
 
     private fun setTimer() {
 
-        object : CountDownTimer(90 * 1000, 1000) {
+        timeObject = object : CountDownTimer(90 * 1000, 1000) {
 
             override fun onTick(p0: Long) {
+                time--
+
                 if (time % 60 >= 10)
                     binding.tvTime.text = "${time / 60}:${time % 60}"
                 else
                     binding.tvTime.text = "${time / 60}:0${time % 60}"
 
-                time--
-
-                if (time % 30 == 0) {
+                if (time == 0) {
                     round++
-                    binding.tvRound.setText(round)
+                    PrefManager(requireContext()).saveInt("round", round)
+                    binding.tvRound.text = "$round"
                 }
 
             }
 
             override fun onFinish() {
-
+//                showResultDialog(time, round, getScore(), isWin)
             }
 
-        }.start()
+        }
+        timeObject?.start()
     }
-
 
     private fun manageGame(value: Float, view: View) {
 
-        if (value < -480 && value > -540 && isNext(view)) {
-            heart--
-            setAttempts()
+
+//        when (view.id) {
+//            ids[0] -> Log.d("@@@", "image one -> value= $value")
+//            ids[1] -> Log.d("@@@", "image two -> value= $value")
+//            ids[2] -> Log.d("@@@", "image three -> value= $value")
+//            ids[3] -> Log.d("@@@", "image four -> value= $value")
+//        }
+
+        if (value.toInt() <= -368 && value.toInt()>=-370) {
+            isClicked=false
+            isChanged = false
         }
+        if (value < -552f && value > -700f && !isClicked) {
+            if (isNext(view)) {
+                heart--
+                setAttempts()
+            }
+        }
+
+        if (value < -551f && !isChanged) {
+            changePosition()
+            Log.d("@@@", "changePosition:$value ->  $list ")
+            isChanged = true
+        }
+
+
         if (heart == -1) {
-            requireActivity().finish()
+            showResultDialog(time, round, getScore(), isWin)
         }
     }
-
 
     private fun isNext(view: View): Boolean {
         return if (lastView != view) {
             lastView = view
             true
+        } else false
+    }
+
+    private fun isSameView(view: View): Boolean {
+        return if (clickedLastView == view) {
+            true
         } else {
+            clickedLastView = view
             false
         }
     }
 
     private fun animOneBegin() {
 
-        val llAnimationFromX = ValueAnimator.ofFloat(0f, -width.toFloat())
-
-        llAnimationFromX.addUpdateListener {
+        firstLlAnimationFromX = ValueAnimator.ofFloat(0f, -width.toFloat())
+        firstLlAnimationFromX?.addUpdateListener {
             val value = it.animatedValue as Float
-            binding.one.visibility = View.VISIBLE
-            manageGame(value, binding.one)
-            binding.one.translationX = value
+
+            if (!isDestroyed) {
+                binding.one.visibility = View.VISIBLE
+
+                manageGame(value, binding.one)
+                binding.one.translationX = value
+            }
         }
-        llAnimationFromX.interpolator = LinearInterpolator()
-        llAnimationFromX.duration = 4000
-        llAnimationFromX.addListener(object : Animator.AnimatorListener {
+        firstLlAnimationFromX?.interpolator = LinearInterpolator()
+        firstLlAnimationFromX?.duration = 8000
+        firstLlAnimationFromX?.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
 
 
@@ -126,8 +222,8 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
         })
 
-        llAnimationFromX.start()
-        object : CountDownTimer(1000, 1000) {
+        firstLlAnimationFromX?.start()
+        object : CountDownTimer(2000, 1000) {
             override fun onTick(p0: Long) {
 
             }
@@ -142,38 +238,41 @@ class GameFragment : Fragment(R.layout.fragment_game) {
     }
 
     private fun animOneEnd() {
+        firstLlAnimationFromXEnd = ValueAnimator.ofFloat(-width.toFloat(), 0f)
 
-        val llAnimationFromX = ValueAnimator.ofFloat(-width.toFloat(), 0f)
-
-        llAnimationFromX.addUpdateListener {
+        firstLlAnimationFromXEnd?.addUpdateListener {
             val value = it.animatedValue as Float
-            binding.one.setImageResource(randomImage())
-
-            binding.one.translationX = value
+            if (!isDestroyed) {
+                list[0] = randomImage()
+                binding.one.setImageResource(list[0])
+                binding.one.translationX = value
+            }
         }
-        llAnimationFromX.interpolator = LinearInterpolator()
-        llAnimationFromX.duration = 0
+        firstLlAnimationFromXEnd?.interpolator = LinearInterpolator()
+        firstLlAnimationFromXEnd?.duration = 0
 
-        llAnimationFromX.start()
+        firstLlAnimationFromXEnd?.start()
 
     }
 
     private fun animTwoBegin() {
 
-        val llAnimationFromX = ValueAnimator.ofFloat(0f, -width.toFloat())
+        secondLlAnimationFromX = ValueAnimator.ofFloat(0f, -width.toFloat())
 
-        llAnimationFromX.addUpdateListener {
+        secondLlAnimationFromX?.addUpdateListener {
             val value = it.animatedValue as Float
-            binding.two.visibility = View.VISIBLE
-            manageGame(value, binding.two)
-            binding.two.translationX = value
+            if (!isDestroyed) {
+                binding.two.visibility = View.VISIBLE
+                manageGame(value, binding.two)
+                binding.two.translationX = value
+            }
         }
-        llAnimationFromX.interpolator = LinearInterpolator()
-        llAnimationFromX.duration = 4000
+        secondLlAnimationFromX?.interpolator = LinearInterpolator()
+        secondLlAnimationFromX?.duration = 8000
 
-        llAnimationFromX.start()
+        secondLlAnimationFromX?.start()
 
-        object : CountDownTimer(1000, 1000) {
+        object : CountDownTimer(2000, 1000) {
             override fun onTick(p0: Long) {
 
             }
@@ -184,7 +283,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
         }.start()
 
-        llAnimationFromX.addListener(object : Animator.AnimatorListener {
+        secondLlAnimationFromX?.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
 
             }
@@ -206,38 +305,42 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
     private fun animTwoEnd() {
 
-        val llAnimationFromX = ValueAnimator.ofFloat(-width.toFloat(), 0f)
+        secondLlAnimationFromXEnd = ValueAnimator.ofFloat(-width.toFloat(), 0f)
 
-        llAnimationFromX.addUpdateListener {
+        secondLlAnimationFromXEnd?.addUpdateListener {
             val value = it.animatedValue as Float
-            binding.two.setImageResource(randomImage())
-
-            binding.two.translationX = value
+            if (!isDestroyed) {
+                list[1] = randomImage()
+                binding.two.setImageResource(list[1])
+                binding.two.translationX = value
+            }
         }
-        llAnimationFromX.interpolator = LinearInterpolator()
-        llAnimationFromX.duration = 0
+        secondLlAnimationFromXEnd?.interpolator = LinearInterpolator()
+        secondLlAnimationFromXEnd?.duration = 0
 
-        llAnimationFromX.start()
+        secondLlAnimationFromXEnd?.start()
 
 
     }
 
     private fun animThreeBegin() {
 
-        val llAnimationFromX = ValueAnimator.ofFloat(0f, -width.toFloat())
+        thirdLlAnimationFromX = ValueAnimator.ofFloat(0f, -width.toFloat())
 
-        llAnimationFromX.addUpdateListener {
+        thirdLlAnimationFromX?.addUpdateListener {
             val value = it.animatedValue as Float
-            binding.three.visibility = View.VISIBLE
-            manageGame(value, binding.three)
-            binding.three.translationX = value
+            if (!isDestroyed) {
+                binding.three.visibility = View.VISIBLE
+                manageGame(value, binding.three)
+                binding.three.translationX = value
+            }
         }
-        llAnimationFromX.interpolator = LinearInterpolator()
-        llAnimationFromX.duration = 4000
+        thirdLlAnimationFromX?.interpolator = LinearInterpolator()
+        thirdLlAnimationFromX?.duration = 8000
 
-        llAnimationFromX.start()
+        thirdLlAnimationFromX?.start()
 
-        object : CountDownTimer(1000, 1000) {
+        object : CountDownTimer(2000, 1000) {
             override fun onTick(p0: Long) {
 
             }
@@ -248,7 +351,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
         }.start()
 
-        llAnimationFromX.addListener(object : Animator.AnimatorListener {
+        thirdLlAnimationFromX?.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
 
             }
@@ -270,35 +373,40 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
     private fun animThreeEnd() {
 
-        val llAnimationFromX = ValueAnimator.ofFloat(-width.toFloat(), 0f)
+        thirdLlAnimationFromXEnd = ValueAnimator.ofFloat(-width.toFloat(), 0f)
 
-        llAnimationFromX.addUpdateListener {
+        thirdLlAnimationFromXEnd?.addUpdateListener {
             val value = it.animatedValue as Float
-            binding.three.setImageResource(randomImage())
-            binding.three.translationX = value
+            if (!isDestroyed) {
+                list[2] = randomImage()
+                binding.three.setImageResource(list[2])
+                binding.three.translationX = value
+            }
         }
-        llAnimationFromX.interpolator = LinearInterpolator()
-        llAnimationFromX.duration = 0
-        llAnimationFromX.start()
+        thirdLlAnimationFromXEnd?.interpolator = LinearInterpolator()
+        thirdLlAnimationFromXEnd?.duration = 0
+        thirdLlAnimationFromXEnd?.start()
 
     }
 
     private fun animFourBegin() {
 
-        val llAnimationFromX = ValueAnimator.ofFloat(0f, -width.toFloat())
+        fourthLlAnimationFromX = ValueAnimator.ofFloat(0f, -width.toFloat())
 
-        llAnimationFromX.addUpdateListener {
+        fourthLlAnimationFromX?.addUpdateListener {
             val value = it.animatedValue as Float
-            binding.four.visibility = View.VISIBLE
-            manageGame(value, binding.four)
-            binding.four.translationX = value
+            if (!isDestroyed) {
+                binding.four.visibility = View.VISIBLE
+                manageGame(value, binding.four)
+                binding.four.translationX = value
+            }
         }
-        llAnimationFromX.interpolator = LinearInterpolator()
-        llAnimationFromX.duration = 4000
+        fourthLlAnimationFromX?.interpolator = LinearInterpolator()
+        fourthLlAnimationFromX?.duration = 8000
 
-        llAnimationFromX.start()
+        fourthLlAnimationFromX?.start()
 
-        object : CountDownTimer(1000, 1000) {
+        object : CountDownTimer(2000, 1000) {
             override fun onTick(p0: Long) {
 
             }
@@ -309,7 +417,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
         }.start()
 
-        llAnimationFromX.addListener(object : Animator.AnimatorListener {
+        fourthLlAnimationFromX?.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
 
             }
@@ -331,18 +439,20 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
     private fun animFourEnd() {
 
-        val llAnimationFromX = ValueAnimator.ofFloat(-width.toFloat(), 0f)
+        fourthLlAnimationFromXEnd = ValueAnimator.ofFloat(-width.toFloat(), 0f)
 
-        llAnimationFromX.addUpdateListener {
+        fourthLlAnimationFromXEnd?.addUpdateListener {
             val value = it.animatedValue as Float
-            binding.four.setImageResource(randomImage())
-
-            binding.four.translationX = value
+            if (!isDestroyed) {
+                list[3] = randomImage()
+                binding.four.setImageResource(list[3])
+                binding.four.translationX = value
+            }
         }
-        llAnimationFromX.interpolator = LinearInterpolator()
-        llAnimationFromX.duration = 0
+        fourthLlAnimationFromXEnd?.interpolator = LinearInterpolator()
+        fourthLlAnimationFromXEnd?.duration = 0
 
-        llAnimationFromX.start()
+        fourthLlAnimationFromXEnd?.start()
 
     }
 
@@ -371,19 +481,6 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         }
     }
 
-    fun View.absX(): Int {
-        val location = IntArray(2)
-        this.getLocationOnScreen(location)
-        return location[0]
-    }
-
-    fun View.absY(): Int {
-        val location = IntArray(2)
-        this.getLocationOnScreen(location)
-        return location[1]
-    }
-
-
     private fun setImageLayoutParams() {
         binding.one.layoutParams.width = width / 4
         binding.one.layoutParams.height = toDp(100)
@@ -393,6 +490,13 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         binding.three.layoutParams.height = toDp(100)
         binding.four.layoutParams.width = width / 4
         binding.four.layoutParams.height = toDp(100)
+
+        binding.apply {
+            one.setImageResource(randomImage())
+            two.setImageResource(randomImage())
+            three.setImageResource(randomImage())
+            four.setImageResource(randomImage())
+        }
     }
 
     private fun randomImage(): Int {
@@ -404,11 +508,109 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         }
     }
 
+    private fun changePosition() {
+        val temp = list[0]
+        list[0] = list[1]
+        list[1] = list[2]
+        list[2] = list[3]
+        list[3] = temp
+
+    }
+
     private fun toDp(size: Int): Int = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
         size.toFloat(),
         resources.displayMetrics
     ).toInt()
 
+    override fun onDestroyView() {
+        isDestroyed = true
+        super.onDestroyView()
+        cancelAllUi()
 
+    }
+
+    private fun cancelAllUi() {
+        timeObject?.cancel()
+        cancelAnim()
+
+    }
+
+    private fun cancelAnim() {
+        fourthLlAnimationFromXEnd?.cancel()
+        fourthLlAnimationFromX?.cancel()
+        thirdLlAnimationFromXEnd?.cancel()
+        thirdLlAnimationFromX?.cancel()
+        secondLlAnimationFromXEnd?.cancel()
+        secondLlAnimationFromX?.cancel()
+        firstLlAnimationFromXEnd?.cancel()
+        firstLlAnimationFromX?.cancel()
+
+    }
+
+    private fun getScore(): String {
+        return when (heart) {
+            -1 -> {
+                isWin = false
+                "0/3"
+            }
+            1 -> {
+                isWin = false
+                "1/2"
+            }
+            2 -> {
+                isWin = true
+                "2/1"
+            }
+            3 -> {
+                isWin = true
+                "3/0"
+            }
+            else -> {
+                ""
+            }
+        }
+
+    }
+
+    private fun showResultDialog(time: Int, round: Int, score: String, gameResult: Boolean) {
+        onDestroyView()
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_main)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window!!.setLayout(
+            (width * 0.85).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        dialog.setCancelable(false)
+
+
+        dialog.findViewById<TextView>(R.id.tvResult).text = if (gameResult) {
+            resources.getString(R.string.you_win)
+        } else {
+            resources.getString(R.string.you_lose)
+        }
+        if (time % 60 >= 10)
+            dialog.findViewById<TextView>(R.id.tvTime).text = "${time / 60}:${time % 60}"
+        else
+            dialog.findViewById<TextView>(R.id.tvTime).text = "${time / 60}:0${time % 60}"
+
+        dialog.findViewById<TextView>(R.id.tvRound).text = round.toString()
+        dialog.findViewById<TextView>(R.id.tvScore).text = score
+
+        dialog.findViewById<TextView>(R.id.btnReplay).click {
+            dialog.dismiss()
+            findNavController().navigate(
+                R.id.gameFragment, arguments,
+                NavOptions.Builder()
+                    .setPopUpTo(R.id.gameFragment, true)
+                    .build()
+            )
+        }
+        dialog.findViewById<TextView>(R.id.btnMenu).click {
+            dialog.dismiss()
+            findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
+        }
+
+        dialog.show()
+    }
 }

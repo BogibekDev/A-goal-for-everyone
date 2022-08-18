@@ -9,6 +9,7 @@ import com.agoal4every1.agoalforeveryone.R
 import com.agoal4every1.agoalforeveryone.manager.PrefManager
 import com.agoal4every1.agoalforeveryone.service.SoundService
 import dev.b3nedikt.app_locale.AppLocale
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +22,9 @@ class MainActivity : AppCompatActivity() {
         if (!PrefManager(this).getBoolean("isMuted")) {
             startService(Intent(this, SoundService::class.java))
         }
+
+
+
     }
 
     override fun onDestroy() {

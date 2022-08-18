@@ -34,5 +34,17 @@ object Extentions {
             myClick.invoke()
         }
     }
+    fun View.absX(): Int {
+        val location = IntArray(2)
+        this.getLocationOnScreen(location)
+        return location[0]
+    }
+
+    fun View.absY(): Int {
+        val location = IntArray(2)
+        this.getLocationOnScreen(location)
+        return location[1]
+    }
+
 
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">A goal for everyone</string>
+    <string name="str_setting">Настройки</string>
+    <string name="str_start">Начать</string>
+    <string name="menu">Меню</string>
+    <string name="start">Начать</string>
+    <string name="time">Время</string>
+    <string name="_1_30">1:30</string>
+    <string name="attempt">Попытки</string>
+    <string name="round">Раунд</string>
+    <string name="round_number">12</string>
+    <string name="score">Счёт</string>
+    <string name="_1_0">1/0</string>
+    <string name="setting">Настройки</string>
+    <string name="sound_on_off">Звук вкл/выкл</string>
+    <string name="vibration_on_off">Вибрация вкл/выкл</string>
+    <string name="language">Язык</string>
+    <string name="back_to_menu">Вернуться в меню</string>
+    <string name="you_win">Победа</string>
+    <string name="you_lose">Проигрыш</string>
+    <string name="replay">Заново</string>
+
+</resources>

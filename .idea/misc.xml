@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/drawable/v_menu.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.22291666666666668" />
+        <entry key="app/src/main/res/layout/dialog_main.xml" value="0.1829059829059829" />
         <entry key="app/src/main/res/layout/fragment_game.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_menu.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.22291666666666668" />

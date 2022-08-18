@@ -9,7 +9,7 @@
         android:id="@+id/menuFragment"
         android:name="com.agoal4every1.agoalforeveryone.ui.fragment.MenuFragment"
         android:label="fragment_menu"
-        tools:layout="@layout/fragment_menu" >
+        tools:layout="@layout/fragment_menu">
         <action
             android:id="@+id/action_menuFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
@@ -21,7 +21,13 @@
         android:id="@+id/gameFragment"
         android:name="com.agoal4every1.agoalforeveryone.ui.fragment.GameFragment"
         android:label="fragment_game"
-        tools:layout="@layout/fragment_game" />
+        tools:layout="@layout/fragment_game">
+        <action
+            android:id="@+id/action_gameFragment_to_menuFragment"
+            app:destination="@id/menuFragment"
+            app:popUpTo="@id/gameFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.agoal4every1.agoalforeveryone.ui.fragment.SettingFragment"

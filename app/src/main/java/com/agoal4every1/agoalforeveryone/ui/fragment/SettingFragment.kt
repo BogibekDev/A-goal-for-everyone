@@ -11,6 +11,7 @@ import com.agoal4every1.agoalforeveryone.service.SoundService
 import com.agoal4every1.agoalforeveryone.utils.Extentions.click
 import com.agoal4every1.agoalforeveryone.utils.viewBinding
 import dev.b3nedikt.app_locale.AppLocale
+import dev.b3nedikt.reword.Reword
 import java.util.*
 
 class SettingFragment : Fragment(R.layout.fragment_setting) {
@@ -25,7 +26,10 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
         binding.apply {
             ivMuteOn.click {
                 PrefManager(requireContext()).saveBoolean("isMuted", false)
-                requireActivity().startService(Intent(requireContext(), SoundService::class.java))
+                if (PrefManager(requireContext()).getBoolean("isMuted"))
+                    requireActivity().startService(
+                        Intent(requireContext(), SoundService::class.java)
+                    )
             }
             ivMuteOff.click {
                 PrefManager(requireContext()).saveBoolean("isMuted", true)
@@ -40,10 +44,12 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
             ivEn.click {
                 PrefManager(requireContext()).saveString("language", "en")
                 AppLocale.desiredLocale = Locale.ENGLISH
+                Reword.reword(binding.root)
             }
             ivRu.click {
                 PrefManager(requireContext()).saveString("language", "ru")
-                AppLocale.desiredLocale = Locale.FRENCH
+                AppLocale.desiredLocale = Locale("ru", "Russia")
+                Reword.reword(binding.root)
             }
             btnBack.click {
                 requireActivity().onBackPressed()
