@@ -47,7 +47,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
     private var isWin: Boolean = false
     private var isClicked: Boolean = false
     private var isChanged: Boolean = false
-    private var list = arrayListOf(randomImage(), randomImage(), randomImage(), randomImage())
+    private var list = arrayOf(randomImage(), randomImage(), randomImage(), randomImage())
     private var ids = arrayOf(0, 1, 2, 3)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -123,16 +123,12 @@ class GameFragment : Fragment(R.layout.fragment_game) {
                 else
                     binding.tvTime.text = "${time / 60}:0${time % 60}"
 
-                if (time == 0) {
-                    round++
-                    PrefManager(requireContext()).saveInt("round", round)
-                    binding.tvRound.text = "$round"
-                }
-
             }
 
             override fun onFinish() {
-//                showResultDialog(time, round, getScore(), isWin)
+                round++
+                PrefManager(requireContext()).saveInt("round", round)
+                showResultDialog(time, round, getScore(), isWin)
             }
 
         }
@@ -149,20 +145,23 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 //            ids[3] -> Log.d("@@@", "image four -> value= $value")
 //        }
 
-        if (value.toInt() <= -368 && value.toInt()>=-370) {
-            isClicked=false
+        if (value <= -255f && value >= -265f) {
+            isClicked = false
+        }
+
+        if (value < -600f && value > -610f) {
             isChanged = false
         }
-        if (value < -552f && value > -700f && !isClicked) {
+
+        if (value < -560f && value > -570f && !isClicked) {
             if (isNext(view)) {
                 heart--
                 setAttempts()
             }
         }
 
-        if (value < -551f && !isChanged) {
+        if (value < -570f && value > -580f && !isChanged) {
             changePosition()
-            Log.d("@@@", "changePosition:$value ->  $list ")
             isChanged = true
         }
 
@@ -177,15 +176,6 @@ class GameFragment : Fragment(R.layout.fragment_game) {
             lastView = view
             true
         } else false
-    }
-
-    private fun isSameView(view: View): Boolean {
-        return if (clickedLastView == view) {
-            true
-        } else {
-            clickedLastView = view
-            false
-        }
     }
 
     private fun animOneBegin() {
@@ -492,10 +482,10 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         binding.four.layoutParams.height = toDp(100)
 
         binding.apply {
-            one.setImageResource(randomImage())
-            two.setImageResource(randomImage())
-            three.setImageResource(randomImage())
-            four.setImageResource(randomImage())
+            one.setImageResource(list[0])
+            two.setImageResource(list[1])
+            three.setImageResource(list[2])
+            four.setImageResource(list[3])
         }
     }
 
