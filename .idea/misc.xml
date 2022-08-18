@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Coder/AndroidStudioProjects/A-goal-for-everyone1/app/src/main/res/layout/activity_main.xml" value="0.1203125" />
+        <entry key="..\:/Users/Coder/AndroidStudioProjects/A-goal-for-everyone1/app/src/main/res/layout/fragment_game.xml" value="0.1203125" />
         <entry key="app/src/main/res/drawable/v_menu.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.22291666666666668" />
         <entry key="app/src/main/res/layout/dialog_main.xml" value="0.1829059829059829" />

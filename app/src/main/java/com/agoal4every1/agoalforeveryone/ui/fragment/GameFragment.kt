@@ -40,7 +40,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
     private var fourthLlAnimationFromXEnd: ValueAnimator? = null
     private var width = 0
     private var height = 0
-    private var heart = 3
+    private var heart = 9
     private var time = 90
     private var round = 1
     private var isDestroyed = false
@@ -68,7 +68,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         lastView = binding.four
         clickedLastView = binding.one
         isWin = false
-        heart = 3
+        heart = 9
         time = 90
         binding.tvRound.text = "$round"
         setIds()
@@ -79,6 +79,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         binding.apply {
             ivUpBlack.click {
                 checkImage(R.drawable.up)
+
             }
             ivDownBlack.click {
                 checkImage(R.drawable.down)
@@ -145,22 +146,22 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 //            ids[3] -> Log.d("@@@", "image four -> value= $value")
 //        }
 
-        if (value <= -255f && value >= -265f) {
+        if (value <= -(0.35 * width).toFloat() && value >= -(0.37 * width).toFloat()) {
             isClicked = false
         }
 
-        if (value < -600f && value > -610f) {
+        if (value < -(0.83 * width).toFloat() && value > -(0.85 * width).toFloat()) {
             isChanged = false
         }
 
-        if (value < -560f && value > -570f && !isClicked) {
+        if (value < -(0.80 * width).toFloat() && value > -(0.82 * width).toFloat() && !isClicked) {
             if (isNext(view)) {
                 heart--
                 setAttempts()
             }
         }
 
-        if (value < -570f && value > -580f && !isChanged) {
+        if (value < -(0.82 * width).toFloat() && value > -(0.84 * width).toFloat() && !isChanged) {
             changePosition()
             isChanged = true
         }
@@ -448,17 +449,17 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
     private fun setAttempts() {
         when (heart) {
-            3 -> {
+            9 -> {
                 binding.vFirstAttempt.setBackgroundResource(R.drawable.v_round_white)
                 binding.vSecondAttempt.setBackgroundResource(R.drawable.v_round_white)
                 binding.vThirdAttempt.setBackgroundResource(R.drawable.v_round_white)
             }
-            2 -> {
+            6 -> {
                 binding.vFirstAttempt.setBackgroundResource(R.drawable.v_round_black)
                 binding.vSecondAttempt.setBackgroundResource(R.drawable.v_round_white)
                 binding.vThirdAttempt.setBackgroundResource(R.drawable.v_round_white)
             }
-            1 -> {
+            3 -> {
                 binding.vFirstAttempt.setBackgroundResource(R.drawable.v_round_black)
                 binding.vSecondAttempt.setBackgroundResource(R.drawable.v_round_black)
                 binding.vThirdAttempt.setBackgroundResource(R.drawable.v_round_white)
@@ -504,7 +505,6 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         list[1] = list[2]
         list[2] = list[3]
         list[3] = temp
-
     }
 
     private fun toDp(size: Int): Int = TypedValue.applyDimension(
@@ -544,20 +544,21 @@ class GameFragment : Fragment(R.layout.fragment_game) {
                 isWin = false
                 "0/3"
             }
-            1 -> {
+            3 -> {
                 isWin = false
                 "1/2"
             }
-            2 -> {
+            6 -> {
                 isWin = true
                 "2/1"
             }
-            3 -> {
+            9 -> {
                 isWin = true
                 "3/0"
             }
             else -> {
-                ""
+                isWin = false
+                "0/3"
             }
         }
 
@@ -602,5 +603,12 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         }
 
         dialog.show()
+    }
+
+
+    fun View.absX(): Int {
+        val location = IntArray(2)
+        this.getLocationOnScreen(location)
+        return location[0]
     }
 }
